@@ -40,19 +40,19 @@ import java.util.concurrent.TimeUnit;
 public class Utils {
 
 	/**
-     * Detects and toggles immersive mode (also known as "hidey bar" mode).
-     *
+     * toggles fullscreen mode
+     * <p/>
      * <pre>
      * sample:
      *     private boolean fullscreen;
      *     ................
      *     Activity activity = (Activity)context;
-     *     toggleHideyBar(activity, !fullscreen);
+     *     toggleFullscreen(activity, !fullscreen);
      *     fullscreen = !fullscreen;
      * </pre>
      */
-    public void toggleHideyBar(Activity activity, boolean fullscreen) {
-        if(Build.VERSION.SDK_INT >= 11){
+    private void toggleFullscreen(Activity activity, boolean fullscreen) {
+        if (Build.VERSION.SDK_INT >= 11) {
             // The UI options currently enabled are represented by a bitfield.
             // getSystemUiVisibility() gives us that bitfield.
             int uiOptions = activity.getWindow().getDecorView().getSystemUiVisibility();
@@ -87,18 +87,28 @@ public class Utils {
                 newUiOptions ^= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
             }
             activity.getWindow().getDecorView().setSystemUiVisibility(newUiOptions);
-        }else {
+        } else {
             // for android pre 11
             WindowManager.LayoutParams attrs = activity.getWindow().getAttributes();
-            if (fullscreen)
-            {
+            if (fullscreen) {
                 attrs.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
-            }
-            else
-            {
+            } else {
                 attrs.flags &= ~WindowManager.LayoutParams.FLAG_FULLSCREEN;
             }
             activity.getWindow().setAttributes(attrs);
+        }
+
+        try {
+            // hide actionbar
+            if (activity instanceof ActionBarActivity) {
+                if (fullscreen) ((ActionBarActivity) activity).getSupportActionBar().hide();
+                else ((ActionBarActivity) activity).getSupportActionBar().show();
+            } else if (Build.VERSION.SDK_INT >= 11) {
+                if (fullscreen) activity.getActionBar().hide();
+                else activity.getActionBar().show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

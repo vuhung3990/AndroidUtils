@@ -28,5 +28,5 @@ pxToDp						convert pixel to dp
 setFullScreen				set full screen
 writeContentFile			write content to file
 writePreference				write preference
-toggleHideyBar				hide nav bar for fullscreen
+toggleFullscreen			toggle fullscreen
 </pre>
