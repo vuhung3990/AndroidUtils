@@ -41,13 +41,14 @@ public class Utils {
 
 	/**
      * toggles fullscreen mode
+     * REQUIRE: android:configChanges="orientation|screenSize"
      * <p/>
      * <pre>
      * sample:
      *     private boolean fullscreen;
      *     ................
      *     Activity activity = (Activity)context;
-     *     toggleFullscreen(activity, !fullscreen);
+     *     toggleHideyBar(activity, !fullscreen);
      *     fullscreen = !fullscreen;
      * </pre>
      */
@@ -110,6 +111,10 @@ public class Utils {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        // set landscape
+        if(fullscreen) activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+        else activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
     }
 
     /**
