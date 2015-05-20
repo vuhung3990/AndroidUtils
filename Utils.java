@@ -1,20 +1,24 @@
-package YOUR PACKAGE;
+package <package-name>;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.MergeCursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.support.v7.app.ActionBarActivity;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -36,10 +40,11 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Created by YuHung on 5/7/2015.
+ * v1.0
  */
 public class Utils {
 
-	/**
+    /**
      * toggles fullscreen mode
      * REQUIRE: android:configChanges="orientation|screenSize"
      * <p/>
@@ -61,9 +66,9 @@ public class Utils {
             boolean isImmersiveModeEnabled =
                     ((uiOptions | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY) == uiOptions);
             if (isImmersiveModeEnabled) {
-                Log.i(context.getPackageName(), "Turning immersive mode mode off. ");
+                Log.i(activity.getPackageName(), "Turning immersive mode mode off. ");
             } else {
-                Log.i(context.getPackageName(), "Turning immersive mode mode on.");
+                Log.i(activity.getPackageName(), "Turning immersive mode mode on.");
             }
 
             // Navigation bar hiding:  Backwards compatible to ICS.
@@ -113,7 +118,8 @@ public class Utils {
         }
 
         // set landscape
-        if(fullscreen) activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+        if (fullscreen)
+            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
         else activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
     }
 
@@ -576,8 +582,8 @@ public class Utils {
         String KEY_PREF = "uiid";
 
         // don't generate uiid if exist in preference
-        String saved_id = (String)getPreferenceValue(context, PREFERENCE_FILE_NAME, KEY_PREF);
-        if(saved_id == null || saved_id == ""){
+        String saved_id = (String) getPreferenceValue(context, PREFERENCE_FILE_NAME, KEY_PREF);
+        if (saved_id == null || saved_id == "") {
             TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
             String id = telephonyManager.getDeviceId();
             // tablet device will return null
@@ -596,7 +602,7 @@ public class Utils {
 
             // after generate uiid, save for use later
             writePreference(context, PREFERENCE_FILE_NAME, KEY_PREF, deviceID);
-        }else {
+        } else {
             deviceID = saved_id;
         }
         return deviceID;
